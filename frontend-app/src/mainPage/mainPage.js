@@ -117,6 +117,15 @@ function MainPage() {
         setDestiny(event.target.value);
     };
   
+    const handleButton=(e)=>{
+        e.preventDefault();
+        fetch("http://localhost8080/flights/api/travel/{origin}/{destiny}", {
+            method:"GET"
+        }).then(()=>{
+            console.log("buscado")
+        });
+    }
+
   return (
     <>
         <header>
@@ -158,9 +167,9 @@ function MainPage() {
                                 label="Origin"
                                 onChange={originChange}
                             >
-                                <MenuItem value={10}>Madrid</MenuItem>
-                                <MenuItem value={20}>Barcelona</MenuItem>
-                                <MenuItem value={30}>Bilbao</MenuItem>
+                                <MenuItem value={"Madrid"}>Madrid</MenuItem>
+                                <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
+                                <MenuItem value={"Bilbao"}>Bilbao</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -175,9 +184,9 @@ function MainPage() {
                                 label="Destiny"
                                 onChange={destinyChange}
                             >
-                                <MenuItem value={10}>London</MenuItem>
-                                <MenuItem value={20}>Barcelona</MenuItem>
-                                <MenuItem value={30}>Paris</MenuItem>
+                                <MenuItem value={"London"}>London</MenuItem>
+                                <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
+                                <MenuItem value={"Paris"}>Paris</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -188,7 +197,7 @@ function MainPage() {
                     <Switch {...label} defaultChecked />                
                 </div>
                 <div className='searchButton'>
-                    <Button variant="contained">Search</Button>
+                    <Button variant="contained" onClick = {handleButton}>Search</Button>
                 </div>
             </div>
 
