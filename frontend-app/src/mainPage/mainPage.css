@@ -1,0 +1,23 @@
+.searchFly{
+    width: 90%;
+    display: flex;
+    align-self: center;
+    
+}
+.LocationInput{
+    margin-left: 20%;
+    margin-top:   5%;
+}
+.lugageSwitch{
+    margin-left: 10%;
+    margin-top:   9%;
+    display: flex;
+}
+.lugageSwitch>p{
+    margin-top:   4%;
+}
+
+.searchButton{
+    margin-left: 10%;
+    margin-top:   9%;
+}
