@@ -1,6 +1,7 @@
 package com.airline.demoairline.model;
 
 
+import com.airline.demoairline.auxiliar.TimeAux;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.joda.time.LocalTime;
 import org.springframework.data.annotation.Id;
@@ -8,10 +9,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Flight {
@@ -26,11 +29,14 @@ public class Flight {
     @DateTimeFormat(pattern= "yyyy-MM-dd")
     private Date date;
 
+    private String strDate;
 
     private String departure;
+    private Long departureSecs;
 
 
     private String arrival;
+    private Long arrivalSecs;
     private int scales;
 
     public Flight() {
@@ -41,10 +47,18 @@ public class Flight {
         this.origin = origin;
         this.destiny = destiny;
         this.airline = airline;
+
         this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        Format f = new SimpleDateFormat("yyyy-MM-dd");
+        this.strDate = f.format(this.date);
+
         this.departure = departure;
         this.arrival = arrival;
         this.scales = scales;
+
+        TimeAux timeAux = new TimeAux();
+        this.departureSecs = timeAux.hourToSeconds(departure);
+        this.arrivalSecs = timeAux.hourToSeconds(arrival);
     }
 
     public Flight(String id, String origin, String destiny, String airline, String date, String departure, String arrival, int scales) throws ParseException {
@@ -52,7 +66,10 @@ public class Flight {
         this.origin = origin;
         this.destiny = destiny;
         this.airline = airline;
+
         this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        Format f = new SimpleDateFormat("yyyy-MM-dd");
+        this.strDate = f.format(this.date);
 
         //this.departure = new SimpleDateFormat("HH:mm").parse(departure);
         //this.arrival = new SimpleDateFormat("HH:mm").parse(arrival);
@@ -60,6 +77,10 @@ public class Flight {
         this.arrival = arrival;
 
         this.scales = scales;
+
+        TimeAux timeAux = new TimeAux();
+        this.departureSecs = timeAux.hourToSeconds(departure);
+        this.arrivalSecs = timeAux.hourToSeconds(arrival);
     }
 
     public String getId() {
@@ -94,11 +115,12 @@ public class Flight {
         this.airline = airline;
     }
 
-    public String getDate() {
-       /* DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String strDate = dateFormat.format(date);*/
+    public Date getDate() {
+        return date;
+    }
 
-        return date.toString();
+    public String getStrDate() {
+        return strDate;
     }
 
     public void setDate(String date) throws ParseException {
@@ -129,4 +151,19 @@ public class Flight {
         this.scales = scales;
     }
 
+    public Long getDepartureSecs() {
+        return departureSecs;
+    }
+
+    public void setDepartureSecs(Long departureSecs) {
+        this.departureSecs = departureSecs;
+    }
+
+    public Long getArrivalSecs() {
+        return arrivalSecs;
+    }
+
+    public void setArrivalSecs(Long arrivalSecs) {
+        this.arrivalSecs = arrivalSecs;
+    }
 }

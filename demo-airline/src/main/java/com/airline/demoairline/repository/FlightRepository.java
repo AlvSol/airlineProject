@@ -1,6 +1,7 @@
 package com.airline.demoairline.repository;
 
 import com.airline.demoairline.model.Flight;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -22,5 +23,8 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
 
     @Query(value = "{$and: [ {origin:'?0'},{destiny:'?1'}]}")
     List<Flight> filterByOriginDestiny(String origin, String destiny);
+
+    @Query(value = "{strDate:?0}", sort= "{departure:1}")
+    List<Flight> filterByDay(String strDate);
 
 }

@@ -1,6 +1,7 @@
 package com.airline.demoairline.controller;
 
 
+import com.airline.demoairline.auxiliar.Quicksort;
 import com.airline.demoairline.model.Flight;
 import com.airline.demoairline.model.Place;
 import com.airline.demoairline.repository.FlightRepository;
@@ -8,12 +9,14 @@ import com.airline.demoairline.repository.PlaceRepository;
 import com.airline.demoairline.service.FlightServiceAPI;
 import com.airline.demoairline.service.FlightServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/flights/api")
@@ -69,6 +72,11 @@ public class FlightController {
         return flightRepository.filterByOriginDestiny(origin, destiny);
     }
 
+    @GetMapping(value = "/travel/{date}")
+    public List<Flight> findByOriginDestiny(@PathVariable String date) {
+        return flightRepository.filterByDay(date);
+    }
+
     @PostMapping(value = "/save")
     public ResponseEntity<Flight> save(@RequestBody Flight flight) {
         Flight obj = flightServiceAPI.save(flight);
@@ -86,5 +94,14 @@ public class FlightController {
 
         return new ResponseEntity<Flight>(obj, HttpStatus.OK);
     }
+
+
+
+    //--------------Auxiliar----------------------
+
+    /*public List<Flight> orderByHour(List<Flight> flights) {
+        Quicksort quicksort = new Quicksort();
+        quicksort.quick(flights, 0, flights.size()-1);
+    }*/
 
 }
