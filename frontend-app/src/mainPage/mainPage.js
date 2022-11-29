@@ -118,8 +118,9 @@ function MainPage() {
     };
   
     const handleButton=(e)=>{
+      console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
         e.preventDefault();
-        fetch("http://localhost8080/flights/api/travel/{origin}/{destiny}", {
+        fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
             method:"GET"
         }).then(()=>{
             console.log("buscado")
