@@ -1,6 +1,6 @@
 import './mainPage.css'
 
-import * as React from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -38,6 +38,7 @@ import Select from '@mui/material/Select';
 //____________________________________________________________________________________//
 
 function MainPage() {
+  
 
     const transdata = [
         {
@@ -69,9 +70,18 @@ function MainPage() {
         },
     ]
 
-    const [order, setOrder]         = React.useState('asc');
-    const [orderBy, setOrderBy]     = React.useState('calories');
-    const [selected, setSelected]   = React.useState([]);
+    const [order, setOrder]         = useState('asc');
+    const [orderBy, setOrderBy]     = useState('calories');
+    const [selected, setSelected]   = useState([]);
+
+    useEffect(() => {
+      // Simple GET request using fetch
+          fetch("http://localhost:8080/flights/api/allplaces", {
+              method:"GET"
+          })
+          .then(response => response.json())
+          .then(data => this.setState({ totalReactPackages: data.total }));
+    });
   
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -108,11 +118,11 @@ function MainPage() {
   
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-    const [origin, setOrigin] = React.useState('');
+    const [origin, setOrigin] = useState('');
     const originChange = (event) => {
         setOrigin(event.target.value);
     };
-    const [destiny, setDestiny] = React.useState('');
+    const [destiny, setDestiny] = useState('');
     const destinyChange = (event) => {
         setDestiny(event.target.value);
     };
@@ -121,10 +131,20 @@ function MainPage() {
       console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
         e.preventDefault();
         fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
-            method:"GET"
-        }).then(()=>{
-            console.log("buscado")
-        });
+            method:"GET",
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json',
+              },
+              'credentials': 'same-origin'
+        })
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data);
+       })
+       .catch((err) => {
+          console.log(err.message);
+       });
     }
 
   return (

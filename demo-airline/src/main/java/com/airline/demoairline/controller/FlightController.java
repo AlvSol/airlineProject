@@ -40,8 +40,13 @@ public class FlightController {
     }
 
     @GetMapping(value="/allplaces")
-    public List<Place> getPlace() {
-        return placeRepository.findAll();
+    public List<String> getPlace() {
+        List<Place> places = placeRepository.findAll();
+        List<String> names = new ArrayList<>();
+        for(Place p: places) {
+            names.add(p.getName());
+        }
+        return names;
     }
 
     @GetMapping(value="/find/origin/{origin}")

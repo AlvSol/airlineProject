@@ -3,6 +3,7 @@ import './App.css';
 import mainPage from './mainPage/mainPage'
 
 function App() {
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -22,5 +23,6 @@ function App() {
     </div>
   );
 }
+
 
 export default mainPage;
