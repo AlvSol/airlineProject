@@ -1,8 +1,9 @@
 package com.airline.demoairline;
 
-import com.airline.demoairline.commons.MockupData;
 import com.airline.demoairline.model.Flight;
+import com.airline.demoairline.model.Place;
 import com.airline.demoairline.repository.FlightRepository;
+import com.airline.demoairline.repository.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,9 @@ public class DemoAirlineApplication implements CommandLineRunner {
 	@Autowired
 	FlightRepository flightRepository;
 
+	@Autowired
+	PlaceRepository placeRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoAirlineApplication.class, args);
 		/*MockupData mockupData = new MockupData();
@@ -25,13 +29,30 @@ public class DemoAirlineApplication implements CommandLineRunner {
 	}
 
 	public void run(String... args) {
+		placeRepository.deleteAll();
 		flightRepository.deleteAll();
 
-		System.out.println("-------------CREATE GROCERY ITEMS-------------------------------\n");
+		System.out.println("-------------CREATE PLACE ITEMS-------------------------------\n");
+		createPlaces();
+
+		System.out.println("-------------CREATE FLIGHT ITEMS-------------------------------\n");
 		createFlights();
-		
 
 	}
+
+	public void createPlaces() {
+		System.out.println("Place creation started...");
+
+		placeRepository.save(new Place("Madrid"));
+		placeRepository.save(new Place("London"));
+		placeRepository.save(new Place("Lisbon"));
+		placeRepository.save(new Place("Athens"));
+		placeRepository.save(new Place("Paris"));
+		placeRepository.save(new Place("Milan"));
+
+		System.out.println("Place creation complete...");
+	}
+
 
 	public void createFlights()  {
 		try {
