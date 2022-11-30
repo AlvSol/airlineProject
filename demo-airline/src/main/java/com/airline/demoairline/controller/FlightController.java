@@ -1,6 +1,7 @@
 package com.airline.demoairline.controller;
 
 
+import com.airline.demoairline.auxiliar.DateListFilters;
 import com.airline.demoairline.auxiliar.Quicksort;
 import com.airline.demoairline.model.Flight;
 import com.airline.demoairline.model.Place;
@@ -35,6 +36,11 @@ public class FlightController {
     @GetMapping(value="/all")
     public List<Flight> getAll() {
         return flightServiceAPI.getAll();
+    }
+
+    @GetMapping(value="/allsorted")
+    public List<Flight> getAllSortedByDate() {
+        return flightRepository.getAllSortedByDate();
     }
 
     @GetMapping(value="/find/airline/{airline}")
@@ -77,6 +83,7 @@ public class FlightController {
         return flightRepository.filterByDay(date);
     }
 
+
     @GetMapping(value = "/travel/{origin}/{destiny}/{date}")
     public List<Flight> filterByOriginDestinyDay(@PathVariable String origin,
                                                  @PathVariable String destiny,
@@ -96,6 +103,34 @@ public class FlightController {
         }
 
         return filtered;
+    }
+
+    @GetMapping(value = "/travel/prueba/{date}")
+    public List<Flight> getFlightsFromDate(@PathVariable String date) throws ParseException {
+
+        List<Flight> flights = new ArrayList<Flight>();
+
+
+            /*DateListFilters dateListFilters = new DateListFilters();
+            Date dateInfo = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+
+            //Obtengo los dias a añadir mas los 3 siguientes
+            int n = dateListFilters.getDays(dateInfo);
+            Date fromDate = dateListFilters.subtractDays(dateInfo, 3);
+            Date toDate = dateListFilters.addDays(dateInfo, n+3);*/
+
+            DateListFilters dateListFilters = new DateListFilters();
+
+            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy");
+            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date fromDate = dateFormatGmt.parse("01-01-2000");
+
+            Date toDate = dateFormatGmt.parse("29-12-2023");
+
+            flights = flightRepository.filterFromToDate(fromDate, toDate);
+
+
+        return flights;
     }
 
     @PostMapping(value = "/save")

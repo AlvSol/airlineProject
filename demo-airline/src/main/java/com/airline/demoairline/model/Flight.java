@@ -26,7 +26,8 @@ public class Flight {
     private String destiny;
     private String airline;
 
-    @DateTimeFormat(pattern= "yyyy-MM-dd")
+    //@DateTimeFormat(pattern= "yyyy-MM-dd")
+    @DateTimeFormat(pattern= "dd-MM-yyyy")
     private Date date;
 
     private String strDate;
@@ -50,8 +51,8 @@ public class Flight {
         this.destiny = destiny;
         this.airline = airline;
 
-        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        Format f = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+        Format f = new SimpleDateFormat("dd-MM-yyyy");
         this.strDate = f.format(this.date);
 
         this.departure = departure;
@@ -70,8 +71,8 @@ public class Flight {
         this.destiny = destiny;
         this.airline = airline;
 
-        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        Format f = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+        Format f = new SimpleDateFormat("dd-MM-yyyy");
         this.strDate = f.format(this.date);
 
         //this.departure = new SimpleDateFormat("HH:mm").parse(departure);
@@ -128,7 +129,7 @@ public class Flight {
     }
 
     public void setDate(String date) throws ParseException {
-        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
     }
 
     public String getDeparture() {

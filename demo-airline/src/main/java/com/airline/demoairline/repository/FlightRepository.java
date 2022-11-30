@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface FlightRepository extends MongoRepository<Flight, String> {
@@ -24,8 +25,14 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
     @Query(value = "{$and: [ {origin:'?0'},{destiny:'?1'}]}")
     List<Flight> filterByOriginDestiny(String origin, String destiny);
 
+    @Query(value="{}", sort= "{date:1, departure:1}")
+    List<Flight> getAllSortedByDate();
+
     @Query(value = "{strDate:?0}", sort= "{departure:1}")
     List<Flight> filterByDay(String strDate);
+
+    @Query("{date : {$gt: fromDate, $lt: toDate}}")
+    List<Flight> filterFromToDate(Date fromDate, Date toDate);
 
     @Query(value = "{$and [{$and: [{origin:'?0'},{destiny:'?1'}]}, {strDate:?0}]}", sort= "{departure:1}")
     List<Flight> filterByOriginDestinyDay(String origin, String destiny, String date);
