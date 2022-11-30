@@ -77,6 +77,27 @@ public class FlightController {
         return flightRepository.filterByDay(date);
     }
 
+    @GetMapping(value = "/travel/{origin}/{destiny}/{date}")
+    public List<Flight> filterByOriginDestinyDay(@PathVariable String origin,
+                                                 @PathVariable String destiny,
+                                                 @PathVariable String date) {
+
+        List<Flight> filtered = new ArrayList<Flight>();
+        List<Flight> list1 = flightRepository.filterByOriginDestiny(origin, destiny);
+        List<Flight> list2 = flightRepository.filterByDay(date);
+
+        for (Flight flight1 : list1) {
+            for (Flight flight2 : list2) {
+                if (flight1.equals(flight2)) {
+                    filtered.add(flight1);
+                    break;
+                }
+            }
+        }
+
+        return filtered;
+    }
+
     @PostMapping(value = "/save")
     public ResponseEntity<Flight> save(@RequestBody Flight flight) {
         Flight obj = flightServiceAPI.save(flight);

@@ -75,6 +75,7 @@ function MainPage() {
     const [orderBy, setOrderBy]     = useState('calories');
     const [selected, setSelected]   = useState([]);
     const [placeList, setPlaceList] = useState([]);
+    const [flightsList, setFlightsList] = useState([]);
 
     useEffect(() => {
       // Simple GET request using axios
@@ -93,7 +94,7 @@ function MainPage() {
   
     const handleSelectAllClick = (event) => {
       if (event.target.checked) {
-        const newSelected = transdata.map((n) => n.origin);
+        const newSelected = flightsList.map((n) => n.origin);
         setSelected(newSelected);
         return;
       }
@@ -129,24 +130,30 @@ function MainPage() {
         setDestiny(event.target.value);
     };
   
-    const handleButton=(e)=>{
-      console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
-        e.preventDefault();
-        fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
-            method:"GET",
-            headers: {
-              'Accept': 'application/json, text/plain, */*',
-              'Content-Type': 'application/json',
-              },
-              'credentials': 'same-origin'
-        })
-        .then(res => res.json())
-        .then((data) => {
-          console.log(data);
-       })
-       .catch((err) => {
-          console.log(err.message);
-       });
+    const handleButton=()=>{
+      setFlightsList([]);
+      axios.get("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny)
+      .then(response=>{
+        console.log(response.data);
+        setFlightsList([...response.data]);
+      })
+      // console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
+      //   e.preventDefault();
+      //   fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
+      //       method:"GET",
+      //       headers: {
+      //         'Accept': 'application/json, text/plain, */*',
+      //         'Content-Type': 'application/json',
+      //         },
+      //         'credentials': 'same-origin'
+      //   })
+      //   .then(res => res.json())
+      //   .then((data) => {
+      //     console.log(data);
+      //  })
+      //  .catch((err) => {
+      //     console.log(err.message);
+      //  });
     }
 
   return (
@@ -238,32 +245,32 @@ function MainPage() {
                                     orderBy={orderBy}
                                     onSelectAllClick={handleSelectAllClick}
                                     onRequestSort={handleRequestSort}
-                                    rowCount={transdata.length}
+                                    rowCount={flightsList.length}
                                 />
                                 <TableBody>
                                 {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                                     rows.sort(getComparator(order, orderBy)).slice() */}
-                                    {stableSort(transdata, getComparator(order, orderBy))
-                                    .map((transdata, index) => {
-                                        const isItemSelected = isSelected(transdata.origin);
+                                    {stableSort(flightsList, getComparator(order, orderBy))
+                                    .map((flightItem, index) => {
+                                        const isItemSelected = isSelected(flightItem.origin);
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, transdata.origin)}
+                                            onClick={(event) => handleClick(event, flightItem.origin)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={transdata.origin}
+                                            key={flightItem.origin}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align="left">{transdata.origin}     </TableCell>
-                                            <TableCell align="left">{transdata.destiny}    </TableCell>
-                                            <TableCell align="left">{transdata.airline}    </TableCell>
-                                            <TableCell align="left">{transdata.date}       </TableCell>
-                                            <TableCell align="left">{transdata.departure}  </TableCell>
-                                            <TableCell align="left">{transdata.arrival}    </TableCell>
-                                            <TableCell align="left">{transdata.scales}</TableCell>
+                                            <TableCell align="left">{flightItem.origin}     </TableCell>
+                                            <TableCell align="left">{flightItem.destiny}    </TableCell>
+                                            <TableCell align="left">{flightItem.airline}    </TableCell>
+                                            <TableCell align="left">{flightItem.strDate}       </TableCell>
+                                            <TableCell align="left">{flightItem.departure}  </TableCell>
+                                            <TableCell align="left">{flightItem.arrival}    </TableCell>
+                                            <TableCell align="left">{flightItem.scales}     </TableCell>
                                         </TableRow>
                                         );
                                     })}    

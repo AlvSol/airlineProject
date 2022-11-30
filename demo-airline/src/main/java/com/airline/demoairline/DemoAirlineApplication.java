@@ -58,12 +58,15 @@ public class DemoAirlineApplication implements CommandLineRunner {
 		try {
 			System.out.println("Data creation started...");
 
-			flightRepository.save(new Flight("Madrid", "London", "Ryanair", "2022-11-12", "12:30", "13:50", 0));
-			flightRepository.save(new Flight("London", "Madrid", "Ryanair", "2022-10-12", "13:36", "14:42", 0));
-			flightRepository.save(new Flight("Athens", "Lisbon", "Iberia", "2022-10-12", "17:36", "18:42", 0));
-			flightRepository.save(new Flight("Athens", "Milan", "Vueling", "2022-07-12", "15:32", "17:40", 1));
+			flightRepository.save(new Flight("Madrid", "London", "Ryanair", "2022-11-12", "12:30", "13:50", 0, 20.0));
+			flightRepository.save(new Flight("Athens", "Lisbon", "Air Europa", "2022-10-12", "20:15", "22:12", 0, 22.5));
+			flightRepository.save(new Flight("London", "Madrid", "Ryanair", "2022-10-12", "13:36", "14:42", 0, 19.8));
+			flightRepository.save(new Flight("Athens", "Lisbon", "Iberia", "2022-10-12", "17:36", "18:42", 0, 23.5));
+			flightRepository.save(new Flight("Athens", "Milan", "Vueling", "2022-07-12", "15:32", "17:40", 1, 32));
+			flightRepository.save(new Flight("Athens", "Lisbon", "Qatar Airlines", "2022-10-12", "08:03", "10:20", 0, 90));
 
 			System.out.println("Data creation complete...");
+
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}

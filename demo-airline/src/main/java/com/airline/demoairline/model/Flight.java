@@ -39,11 +39,13 @@ public class Flight {
     private Long arrivalSecs;
     private int scales;
 
+    private double price;
+
     public Flight() {
 
     }
 
-    public Flight(String origin, String destiny, String airline, String date, String departure, String arrival, int scales) throws ParseException {
+    public Flight(String origin, String destiny, String airline, String date, String departure, String arrival, int scales, double price) throws ParseException {
         this.origin = origin;
         this.destiny = destiny;
         this.airline = airline;
@@ -55,13 +57,14 @@ public class Flight {
         this.departure = departure;
         this.arrival = arrival;
         this.scales = scales;
+        this.price = price;
 
         TimeAux timeAux = new TimeAux();
         this.departureSecs = timeAux.hourToSeconds(departure);
         this.arrivalSecs = timeAux.hourToSeconds(arrival);
     }
 
-    public Flight(String id, String origin, String destiny, String airline, String date, String departure, String arrival, int scales) throws ParseException {
+    public Flight(String id, String origin, String destiny, String airline, String date, String departure, String arrival, int scales, double price) throws ParseException {
         this.id = id;
         this.origin = origin;
         this.destiny = destiny;
@@ -77,6 +80,7 @@ public class Flight {
         this.arrival = arrival;
 
         this.scales = scales;
+        this.price = price;
 
         TimeAux timeAux = new TimeAux();
         this.departureSecs = timeAux.hourToSeconds(departure);
@@ -151,6 +155,14 @@ public class Flight {
         this.scales = scales;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public Long getDepartureSecs() {
         return departureSecs;
     }
@@ -165,5 +177,14 @@ public class Flight {
 
     public void setArrivalSecs(Long arrivalSecs) {
         this.arrivalSecs = arrivalSecs;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj.getClass() != Flight.class)
+            return false;
+
+        return this.id.equals(((Flight) obj).id);
     }
 }

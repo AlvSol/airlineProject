@@ -27,4 +27,7 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
     @Query(value = "{strDate:?0}", sort= "{departure:1}")
     List<Flight> filterByDay(String strDate);
 
+    @Query(value = "{$and [{$and: [{origin:'?0'},{destiny:'?1'}]}, {strDate:?0}]}", sort= "{departure:1}")
+    List<Flight> filterByOriginDestinyDay(String origin, String destiny, String date);
+
 }
