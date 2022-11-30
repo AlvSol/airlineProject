@@ -1,4 +1,5 @@
-import './mainPage.css'
+import './MainPage.css'
+import UserPage from '../userPage/UserPage';
 
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -35,10 +36,18 @@ import { visuallyHidden } from '@mui/utils';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Link } from "react-router-dom"; 
+import dayjs from 'dayjs';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 //____________________________________________________________________________________//
 
 function MainPage() {
-
     const transdata = [
         {
             origin:"Madrid",
@@ -79,23 +88,16 @@ function MainPage() {
       setOrderBy(property);
     };
   
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelected = transdata.map((n) => n.origin);
-        setSelected(newSelected);
-        return;
-      }
-      setSelected([]);
-    };
   
     const handleClick = (event, name) => {
+        window.location='/passengers'
         const selectedIndex = selected.indexOf(name);
         let newSelected = [];
     
         if (selectedIndex === -1)                           newSelected = newSelected.concat(selected, name);
         else if (selectedIndex === 0)                       newSelected = newSelected.concat(selected.slice(1));
         else if (selectedIndex === selected.length - 1)     newSelected = newSelected.concat(selected.slice(0, -1));
-       else if (selectedIndex > 0) {
+        else if (selectedIndex > 0) {
         newSelected = newSelected.concat(
           selected.slice(0, selectedIndex),
           selected.slice(selectedIndex + 1),
@@ -116,6 +118,10 @@ function MainPage() {
     const destinyChange = (event) => {
         setDestiny(event.target.value);
     };
+
+    const openPage=()=>{
+      window.location="/passengers"
+    }
   
     const handleButton=(e)=>{
       console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
@@ -126,6 +132,14 @@ function MainPage() {
             console.log("buscado")
         });
     }
+
+  const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
+
+  const [date, setDate] = React.useState(new Date());
 
   return (
     <>
@@ -156,7 +170,8 @@ function MainPage() {
             </AppBar>
         </header>
         <body>
-            <div className='searchFly'>
+          <div className = 'bodyHead'>
+          <div className='searchFly'>
                 <div className='LocationInput'>
                     <Box sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
@@ -193,16 +208,25 @@ function MainPage() {
                     </Box>
 
                 </div>
-                <div className='lugageSwitch'>
-                    <p>Has lugage?</p>
-                    <Switch {...label} defaultChecked />                
+                <div className='dateSelector'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Stack spacing={3}>
+                      <DesktopDatePicker
+                        label="Fly date"
+                        inputFormat="DD/MM/YYYY"
+                        value={date}
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </Stack>
+                  </LocalizationProvider>
                 </div>
                 <div className='searchButton'>
                     <Button variant="contained" onClick = {handleButton}>Search</Button>
                 </div>
             </div>
-
-            <div className ='flightsTable'>
+          </div>
+          <div className ='flightsTable'>
                 <Box sx={{ width: '80%' , margin:'5%'}}>
                     <Paper sx={{ width: '100%', mb: 2 }}>
                         <EnhancedTableToolbar numSelected={selected.length} />
@@ -212,38 +236,29 @@ function MainPage() {
                                     numSelected={selected.length}
                                     order={order}
                                     orderBy={orderBy}
-                                    onSelectAllClick={handleSelectAllClick}
                                     onRequestSort={handleRequestSort}
                                     rowCount={transdata.length}
                                 />
                                 <TableBody>
-                                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                                    rows.sort(getComparator(order, orderBy)).slice() */}
-                                    {stableSort(transdata, getComparator(order, orderBy))
-                                    .map((transdata, index) => {
-                                        const isItemSelected = isSelected(transdata.origin);
-                                        const labelId = `enhanced-table-checkbox-${index}`;
-                                        return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, transdata.origin)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={transdata.origin}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell align="left">{transdata.origin}     </TableCell>
-                                            <TableCell align="left">{transdata.destiny}    </TableCell>
-                                            <TableCell align="left">{transdata.airline}    </TableCell>
-                                            <TableCell align="left">{transdata.date}       </TableCell>
-                                            <TableCell align="left">{transdata.departure}  </TableCell>
-                                            <TableCell align="left">{transdata.arrival}    </TableCell>
-                                            <TableCell align="left">{transdata.scales}</TableCell>
-                                        </TableRow>
-                                        );
-                                    })}    
-                                </TableBody>
+                                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                                  rows.sort(getComparator(order, orderBy)).slice() */}
+                                  {stableSort(transdata, getComparator(order, orderBy))
+                                  .map((transdata, index) => {
+                                    const isItemSelected = isSelected(transdata.origin);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    return (
+                                      <tr className='flyRow' onClick={openPage}>
+                                        <TableCell align="left" >{transdata.origin}    </TableCell>
+                                        <TableCell align="left">{transdata.destiny}   </TableCell>
+                                        <TableCell align="left">{transdata.airline}   </TableCell>
+                                        <TableCell align="left">{transdata.date}      </TableCell>
+                                        <TableCell align="left">{transdata.departure} </TableCell>
+                                        <TableCell align="left">{transdata.arrival}   </TableCell>
+                                        <TableCell align="left">{transdata.scales}    </TableCell>
+                                      </tr>
+                                    );
+                                  })}    
+                              </TableBody>
                             </Table>
                         </TableContainer>
                     </Paper>

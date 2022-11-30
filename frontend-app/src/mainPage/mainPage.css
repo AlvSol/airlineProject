@@ -1,3 +1,6 @@
+.bodyHead{
+    display: flex;
+}
 .searchFly{
     width: 90%;
     display: flex;
@@ -20,4 +23,19 @@
 .searchButton{
     margin-left: 10%;
     margin-top:   9%;
+}
+.dateSelector{
+    width: 15%;
+    margin-left: 5%;
+    margin-top: 8%;
+}
+.bodyHead{
+    margin:auto;
+}
+.flightsTable{
+    margin:auto;
+}
+.flyRow:hover{
+    cursor: pointer;
+    background-color: rgb(220,220,220);
 }

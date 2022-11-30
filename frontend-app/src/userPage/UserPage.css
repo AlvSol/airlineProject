@@ -1,0 +1,38 @@
+.userBody{
+    display: flex;
+}
+
+.passengerForm{
+    width: 90%;
+    display: flex;
+    align-self: center;
+    
+}
+.passengerData{
+    margin-left: 20%;
+    margin-top:   2%;
+}
+
+.hasLugage{
+    margin-left: 2%;
+    margin-top: 0%;
+    display: flex;
+}
+.hasLugage>p{
+    margin-top: -2%;
+}
+
+.textInput{
+    margin-bottom: 5%;
+}
+
+.extraPassengers{
+    width:  40%;
+    max-height: 500px;
+    height: 30%;
+    margin-right: 10%;
+    margin-top: 6%;
+}
+.passengerButtons{
+    margin:4%;
+}
