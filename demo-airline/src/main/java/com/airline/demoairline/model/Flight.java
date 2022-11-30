@@ -27,17 +27,14 @@ public class Flight {
     private String airline;
 
     //@DateTimeFormat(pattern= "yyyy-MM-dd")
-    @DateTimeFormat(pattern= "dd-MM-yyyy")
+    @DateTimeFormat(pattern= "yyyy-MM-dd")
     private Date date;
 
     private String strDate;
 
     private String departure;
-    private Long departureSecs;
-
 
     private String arrival;
-    private Long arrivalSecs;
     private int scales;
 
     private double price;
@@ -51,18 +48,14 @@ public class Flight {
         this.destiny = destiny;
         this.airline = airline;
 
-        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-        Format f = new SimpleDateFormat("dd-MM-yyyy");
+        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        Format f = new SimpleDateFormat("yyyy-MM-dd");
         this.strDate = f.format(this.date);
 
         this.departure = departure;
         this.arrival = arrival;
         this.scales = scales;
         this.price = price;
-
-        TimeAux timeAux = new TimeAux();
-        this.departureSecs = timeAux.hourToSeconds(departure);
-        this.arrivalSecs = timeAux.hourToSeconds(arrival);
     }
 
     public Flight(String id, String origin, String destiny, String airline, String date, String departure, String arrival, int scales, double price) throws ParseException {
@@ -71,8 +64,8 @@ public class Flight {
         this.destiny = destiny;
         this.airline = airline;
 
-        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-        Format f = new SimpleDateFormat("dd-MM-yyyy");
+        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        Format f = new SimpleDateFormat("yyyy-MM-dd");
         this.strDate = f.format(this.date);
 
         //this.departure = new SimpleDateFormat("HH:mm").parse(departure);
@@ -82,10 +75,6 @@ public class Flight {
 
         this.scales = scales;
         this.price = price;
-
-        TimeAux timeAux = new TimeAux();
-        this.departureSecs = timeAux.hourToSeconds(departure);
-        this.arrivalSecs = timeAux.hourToSeconds(arrival);
     }
 
     public String getId() {
@@ -129,7 +118,7 @@ public class Flight {
     }
 
     public void setDate(String date) throws ParseException {
-        this.date = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+        this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
     }
 
     public String getDeparture() {
@@ -164,21 +153,6 @@ public class Flight {
         this.price = price;
     }
 
-    public Long getDepartureSecs() {
-        return departureSecs;
-    }
-
-    public void setDepartureSecs(Long departureSecs) {
-        this.departureSecs = departureSecs;
-    }
-
-    public Long getArrivalSecs() {
-        return arrivalSecs;
-    }
-
-    public void setArrivalSecs(Long arrivalSecs) {
-        this.arrivalSecs = arrivalSecs;
-    }
 
     @Override
     public boolean equals(Object obj) {

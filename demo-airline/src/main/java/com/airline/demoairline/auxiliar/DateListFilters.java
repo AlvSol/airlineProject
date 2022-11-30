@@ -7,10 +7,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @EnableMongoRepositories
 public class DateListFilters {
@@ -23,6 +20,32 @@ public class DateListFilters {
 
     public DateListFilters() {
         this.currentDate = new Date();
+    }
+
+
+    public List<Date> getDatesBetweenUsingJava7(Date startDate, Date endDate) {
+        List<Date> datesInRange = new ArrayList<>();
+        Calendar calendar = getCalendarWithoutTime(startDate);
+        Calendar endCalendar = getCalendarWithoutTime(endDate);
+
+        while (calendar.before(endCalendar)) {
+            Date result = calendar.getTime();
+            datesInRange.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        return datesInRange;
+    }
+
+    private static Calendar getCalendarWithoutTime(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
     }
 
     public Date addDays(Date date, int days) {

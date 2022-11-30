@@ -2,19 +2,18 @@ package com.airline.demoairline.controller;
 
 
 import com.airline.demoairline.auxiliar.DateListFilters;
-import com.airline.demoairline.auxiliar.Quicksort;
 import com.airline.demoairline.model.Flight;
 import com.airline.demoairline.model.Place;
 import com.airline.demoairline.repository.FlightRepository;
 import com.airline.demoairline.repository.PlaceRepository;
 import com.airline.demoairline.service.FlightServiceAPI;
-import com.airline.demoairline.service.FlightServiceImpl;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -89,6 +88,43 @@ public class FlightController {
                                                  @PathVariable String destiny,
                                                  @PathVariable String date) {
 
+        return getByOriginDestinyDay(origin, destiny, date);
+    }
+
+
+    @GetMapping(value = "/travel/prueba/{origin}/{destiny}/{date}")
+    public List<Flight> getFlightsFromDate(@PathVariable String origin, @PathVariable String destiny, @PathVariable String date) throws ParseException {
+
+            List<Flight> flights = new ArrayList<>(), totalFlights = new ArrayList<>();
+            //flights = flightRepository.filterByOriginDestinyDay(origin, destiny, date);
+
+            DateListFilters dateListFilters = new DateListFilters();
+            Date dateInfo = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+
+            //Obtengo los dias a añadir mas los 3 siguientes
+            int n = dateListFilters.getDays(dateInfo);
+            Date fromDate = dateListFilters.subtractDays(dateInfo, 3);
+            Date toDate = dateListFilters.addDays(dateInfo, n+3);
+
+            List<Date> dateList = dateListFilters.getDatesBetweenUsingJava7(fromDate, toDate);
+            for (Date ditem: dateList) {
+
+                flights.clear();
+
+                Format f = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = f.format(ditem);
+
+                flights = getByOriginDestinyDay(origin, destiny, strDate);
+                totalFlights.addAll(flights);
+            }
+
+
+        return totalFlights;
+    }
+
+
+    public List<Flight> getByOriginDestinyDay(String origin, String destiny, String date) {
+
         List<Flight> filtered = new ArrayList<Flight>();
         List<Flight> list1 = flightRepository.filterByOriginDestiny(origin, destiny);
         List<Flight> list2 = flightRepository.filterByDay(date);
@@ -103,34 +139,6 @@ public class FlightController {
         }
 
         return filtered;
-    }
-
-    @GetMapping(value = "/travel/prueba/{date}")
-    public List<Flight> getFlightsFromDate(@PathVariable String date) throws ParseException {
-
-        List<Flight> flights = new ArrayList<Flight>();
-
-
-            /*DateListFilters dateListFilters = new DateListFilters();
-            Date dateInfo = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-
-            //Obtengo los dias a añadir mas los 3 siguientes
-            int n = dateListFilters.getDays(dateInfo);
-            Date fromDate = dateListFilters.subtractDays(dateInfo, 3);
-            Date toDate = dateListFilters.addDays(dateInfo, n+3);*/
-
-            DateListFilters dateListFilters = new DateListFilters();
-
-            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy");
-            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-            Date fromDate = dateFormatGmt.parse("01-01-2000");
-
-            Date toDate = dateFormatGmt.parse("29-12-2023");
-
-            flights = flightRepository.filterFromToDate(fromDate, toDate);
-
-
-        return flights;
     }
 
     @PostMapping(value = "/save")
