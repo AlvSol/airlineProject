@@ -1,6 +1,7 @@
 import './mainPage.css'
 
 import React, {Component, useState, useEffect} from 'react';
+import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -73,15 +74,16 @@ function MainPage() {
     const [order, setOrder]         = useState('asc');
     const [orderBy, setOrderBy]     = useState('calories');
     const [selected, setSelected]   = useState([]);
+    const [placeList, setPlaceList] = useState([]);
 
     useEffect(() => {
-      // Simple GET request using fetch
-          fetch("http://localhost:8080/flights/api/allplaces", {
-              method:"GET"
-          })
-          .then(response => response.json())
-          .then(data => this.setState({ totalReactPackages: data.total }));
-    });
+      // Simple GET request using axios
+      axios.get("http://localhost:8080/flights/api/allplaces")
+      .then(response=>{
+        console.log(response)
+        setPlaceList(response.data);
+      })
+    },[]);
   
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -188,9 +190,10 @@ function MainPage() {
                                 label="Origin"
                                 onChange={originChange}
                             >
-                                <MenuItem value={"Madrid"}>Madrid</MenuItem>
-                                <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
-                                <MenuItem value={"Bilbao"}>Bilbao</MenuItem>
+                              {
+                                placeList.map((content) =>
+                                (<MenuItem value={content}>{content}</MenuItem>))
+                              }
                             </Select>
                         </FormControl>
                     </Box>
@@ -205,9 +208,10 @@ function MainPage() {
                                 label="Destiny"
                                 onChange={destinyChange}
                             >
-                                <MenuItem value={"London"}>London</MenuItem>
-                                <MenuItem value={"Barcelona"}>Barcelona</MenuItem>
-                                <MenuItem value={"Paris"}>Paris</MenuItem>
+                              {
+                                placeList.map((content) =>
+                                (<MenuItem value={content}>{content}</MenuItem>))
+                              }
                             </Select>
                         </FormControl>
                     </Box>
