@@ -1,12 +1,15 @@
 package com.airline.userdemo.controller;
 
+import com.airline.userdemo.model.Nationality;
 import com.airline.userdemo.model.User;
+import com.airline.userdemo.repository.NationalityRepository;
 import com.airline.userdemo.service.UserServiceAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,15 +20,32 @@ public class UserController {
     @Autowired
     private UserServiceAPI userServiceAPI;
 
+    @Autowired
+    private NationalityRepository nationalityRepository;
+
+
     @GetMapping(value="/all")
     public List<User> getAll() {
         return userServiceAPI.getAll();
+    }
+
+    @GetMapping(value="/allnations")
+    public List<String> getAllNationalities() {
+        List<Nationality> list = nationalityRepository.findAll();
+        List<String> names = new ArrayList<String>();
+
+        for(Nationality nationality: list) {
+            names.add(nationality.getNationality());
+        }
+
+        return names;
     }
 
     @GetMapping(value = "/find/{id}")
     public User find(@PathVariable String id) {
         return userServiceAPI.get(id);
     }
+
 
     @PostMapping(value = "/save")
     public ResponseEntity<User> save(@RequestBody User user) {

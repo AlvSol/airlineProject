@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl extends GenericServiceImpl<User, String> implements UserServiceAPI{
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Override
     public CrudRepository<User, String> getDao() {
-        return null;
+        return userRepository;
     }
 }
