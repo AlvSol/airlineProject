@@ -146,7 +146,7 @@ function MainPage() {
   
     const handleButton=()=>{
       setFlightsList([]);
-      axios.get("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny)
+      axios.get("http://localhost:8080/flights/api/travel/list/" + origin + "/" + destiny + "/" + date)
       .then(response=>{
         console.log(response.data);
         setFlightsList([...response.data]);
@@ -173,7 +173,7 @@ function MainPage() {
   const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
 
   const handleChange = (newValue) => {
-    setValue(newValue);
+    setDate(newValue);
   };
 
   const [date, setDate] = React.useState(new Date());
@@ -252,7 +252,7 @@ function MainPage() {
                     <Stack spacing={3}>
                       <DesktopDatePicker
                         label="Fly date"
-                        inputFormat="DD/MM/YYYY"
+                        inputFormat="YYYY-MM-DD"
                         value={date}
                         onChange={handleChange}
                         renderInput={(params) => <TextField {...params} />}

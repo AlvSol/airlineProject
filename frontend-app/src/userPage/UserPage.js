@@ -35,7 +35,6 @@ import { visuallyHidden } from '@mui/utils';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -43,6 +42,11 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 //____________________________________________________________________________________//
 
@@ -67,19 +71,7 @@ function UserPage(props) {
     };
 
     const [lugageWarning, setlugageWarning] = React.useState(false);
-  
-    // const handleButton=(e)=>{
-    //     console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
-    //     e.preventDefault();
-    //     fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
-    //         method:"GET"
-    //     }).then(()=>{
-    //         console.log("buscado")
-    //     });
-    // }
-
     
-
     function getFinalPrice(flyprice){
         let finalprice;
         finalprice = (lugageWarning? flyprice*1.2 : flyprice);
@@ -122,6 +114,48 @@ function UserPage(props) {
         console.log(extraPassengers);
     }
 
+
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+    const [nameText,        setNameText]        = React.useState("");
+    const [surnameText,     setSurnameText]     = React.useState("");
+    const [idText,          setIDText]          = React.useState("");
+    const [errorMessage,    setErrorMessage]    = React.useState("");
+    const [buyMessage,      setBuyMessage]      = React.useState("buymessage");
+
+    // Set errorMessage only if text is equal or bigger than MAX_LENGTH
+    React.useEffect(() => {
+        if (nameText.length <1) setErrorMessage("The input has exceeded the maximum number of characters");
+    }, [nameText]);
+    React.useEffect(() => {
+        if (surnameText.length <1) setErrorMessage("The input has exceeded the maximum number of characters");
+    }, [surnameText]);
+    React.useEffect(() => {
+        if (idText.length <1) setErrorMessage("The input has exceeded the maximum number of characters");
+    }, [idText]);
+
+    React.useEffect(()=>{
+        if(nameText && surnameText && idText && age && nationality)
+           setBuyMessage("You have successfully bought your tickets!");
+        else
+            setBuyMessage("Complete all captions to buy the tickets");
+    }, [nameText,surnameText, idText, age, nationality])
+
+    // Set empty erroMessage only if text is less than MAX_LENGTH
+    // and errorMessage is not empty.
+    // avoids setting empty errorMessage if the errorMessage is already empty
+    React.useEffect(() => { if (nameText.length >1 && errorMessage) setErrorMessage(""); }, [nameText, errorMessage]);
+    React.useEffect(() => { if (surnameText.length >1 && errorMessage) setErrorMessage(""); }, [surnameText, errorMessage]);
+    React.useEffect(() => { if (idText.length >1 && errorMessage) setErrorMessage(""); }, [idText, errorMessage]);
+
+    
   return (
     <>
         <header>
@@ -158,10 +192,12 @@ function UserPage(props) {
                         <React.Fragment>
                             <CardContent>
 
-                                <TextField id="standard-basic" label="Name" variant="standard" 
-                                helperText="Please enter your name" className='textInput'/>
-                                <TextField id="standard-basic" label="Surname" variant="standard" 
-                                helperText="Please enter your surname" className='textInput'/>
+                                <TextField required id="standard-basic" label="Name" variant="standard" 
+                                helperText="Please enter your name" className='textInput' error={nameText.length <1}
+                                onChange={(e) => setNameText(e.target.value)} value={nameText}/>
+                                <TextField required id="standard-basic" label="Surname" variant="standard" 
+                                helperText="Please enter your surname" className='textInput'error={surnameText.length <1}
+                                onChange={(e) => setSurnameText(e.target.value)} value={surnameText}/>
 
                                 <Box sx={{ minWidth: 120 }}>
                                     <FormControl fullWidth>
@@ -169,20 +205,21 @@ function UserPage(props) {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
+                                            error ={nationality==''}
                                             value={nationality}
                                             label="nationality"
                                             onChange={nationalityChange}
                                         >
                                             {nationalities.map((nationality)=>(
-                                                <MenuItem value={0}> {nationality} </MenuItem>
+                                                <MenuItem value={1}> {nationality} </MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </Box>  
 
-                                <TextField id="standard-basic" label="Identification" variant="standard"
-                                    helperText="Please enter your NIF" className='textInput'
-                                />
+                                <TextField required id="standard-basic" label="Identification" variant="standard"
+                                    helperText="Please enter your NIF" className='textInput'error={idText.length <1}
+                                    onChange={(e) => setIDText(e.target.value)} value={idText}/>
 
                                 <Box sx={{ minWidth: 120 }}>
                                     <FormControl fullWidth>
@@ -190,13 +227,14 @@ function UserPage(props) {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
+                                            error={age==''}
                                             value={age}
                                             label="age"
                                             onChange={ageChange}
                                         >
-                                            <MenuItem value={0}> {'<2 years'} </MenuItem>
-                                            <MenuItem value={1}> {'2-9 years'} </MenuItem>
-                                            <MenuItem value={2}>{'>9 years'}</MenuItem>
+                                            <MenuItem value={1}> {'<2 years'} </MenuItem>
+                                            <MenuItem value={2}> {'2-9 years'} </MenuItem>
+                                            <MenuItem value={3}>{'>9 years'}</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>
@@ -210,7 +248,6 @@ function UserPage(props) {
                                         <Alert severity="warning">This will increase the final price </Alert>
                                     </Collapse>
                                 </div>
-
                             </CardActions>
                         </React.Fragment>
                     </Card>
@@ -234,9 +271,9 @@ function UserPage(props) {
                                                     label="age"
                                                     onChange={(e)=>passengerAgeChange(row.id, e)}
                                                 >
-                                                    <MenuItem value={0}> {'<2 years'}   </MenuItem>
-                                                    <MenuItem value={1}> {'2-9 years'}  </MenuItem>
-                                                    <MenuItem value={2}> {'>9 years'}   </MenuItem>
+                                                    <MenuItem value={1}> {'<2 years'}   </MenuItem>
+                                                    <MenuItem value={2}> {'2-9 years'}  </MenuItem>
+                                                    <MenuItem value={3}> {'>9 years'}   </MenuItem>
                                                 </Select>
                                         </FormControl>
                                     </TableCell>
@@ -251,8 +288,24 @@ function UserPage(props) {
                 </div>
                 <div className='priceText'>
                     <h2>Total price: </h2><h2>{getFinalPrice(20)}</h2>
-                    <Button variant="contained" onClick = {RemovePassenger}>Buy tickets</Button>   
+                    <Button variant="contained" onClick={handleClickOpen}> Buy tickets</Button>   
                 </div>
+            </div>
+            <div className='successBought'>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                > 
+                    <DialogTitle id="alert-dialog-title">
+                        {buyMessage}
+                    </DialogTitle>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Continue</Button>
+                    </DialogActions>
+                </Dialog>
+                {console.log()}
             </div>
         </body>        
     </>
