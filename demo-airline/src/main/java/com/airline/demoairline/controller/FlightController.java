@@ -92,18 +92,18 @@ public class FlightController {
     }
 
 
-    @GetMapping(value = "/travel/prueba/{origin}/{destiny}/{date}")
+    @GetMapping(value = "/travel/list/{origin}/{destiny}/{date}")
     public List<Flight> getFlightsFromDate(@PathVariable String origin, @PathVariable String destiny, @PathVariable String date) throws ParseException {
 
             List<Flight> flights = new ArrayList<>(), totalFlights = new ArrayList<>();
             //flights = flightRepository.filterByOriginDestinyDay(origin, destiny, date);
 
-            DateListFilters dateListFilters = new DateListFilters();
+            DateListFilters dateListFilters = new DateListFilters(this.flightRepository);
             Date dateInfo = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
             //Obtengo los dias a añadir mas los 3 siguientes
             int n = dateListFilters.getDays(dateInfo);
-            Date fromDate = dateListFilters.subtractDays(dateInfo, 3);
+            Date fromDate = dateListFilters.subtractDays(dateInfo, 3-n);
             Date toDate = dateListFilters.addDays(dateInfo, n+3);
 
             List<Date> dateList = dateListFilters.getDatesBetweenUsingJava7(fromDate, toDate);

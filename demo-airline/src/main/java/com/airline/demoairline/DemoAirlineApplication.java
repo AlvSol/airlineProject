@@ -58,13 +58,15 @@ public class DemoAirlineApplication implements CommandLineRunner {
 		try {
 			System.out.println("Data creation started...");
 
-			flightRepository.save(new Flight("Madrid", "London", "Ryanair", "2022-11-12", "12:30", "13:50", 0, 20.0));
-			flightRepository.save(new Flight("Athens", "Lisbon", "Air Europa", "2022-10-12", "20:15", "22:12", 0, 22.5));
-			flightRepository.save(new Flight("London", "Madrid", "Ryanair", "2022-10-12", "13:36", "14:42", 0, 19.8));
-			flightRepository.save(new Flight("Athens", "Lisbon", "Iberia", "2022-10-12", "17:36", "18:42", 0, 23.5));
-			flightRepository.save(new Flight("Athens", "Milan", "Vueling", "2022-10-07", "15:32", "17:40", 1, 32));
-			flightRepository.save(new Flight("Athens", "Lisbon", "Qatar Airlines", "2022-10-12", "08:03", "10:20", 0, 90));
-			flightRepository.save(new Flight("Paris", "Milan", "France Airlines", "2022-12-03", "09:03", "11:20", 0, 21.6));
+
+			flightRepository.save(new Flight("Madrid", "London", "Ryanair", "2023-01-12", "12:30", "13:50", 0, 20.0));
+			flightRepository.save(new Flight("London", "Madrid", "Ryanair", "2023-01-16", "13:30", "14:50", 0, 23.5));
+			flightRepository.save(new Flight("Athens", "Milan", "Vueling", "2022-12-15", "10:30", "11:50", 1, 31.0));
+			flightRepository.save(new Flight("Paris", "London", "Iberia", "2023-01-07", "06:30", "07:12", 0, 15.2));
+			flightRepository.save(new Flight("Lisbon", "Madrid", "Iberia", "2022-12-18", "11:00", "12:03", 0, 17.6));
+			flightRepository.save(new Flight("Milan", "Madrid", "Ryanair", "2023-01-05", "16:30", "19:50", 2, 5.3));
+			flightRepository.save(new Flight("Athens", "London", "Vueling", "2023-01-23", "10:30", "12:02", 0, 27.0));
+
 
 			System.out.println("Data creation complete...");
 

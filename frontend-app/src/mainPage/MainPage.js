@@ -146,7 +146,7 @@ function MainPage() {
   
     const handleButton=()=>{
       setFlightsList([]);
-      axios.get("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny)
+      axios.get("http://localhost:8080/flights/api/travel/list/" + origin + "/" + destiny + "/" + dateString)
       .then(response=>{
         console.log(response.data);
         setFlightsList([...response.data]);
@@ -170,13 +170,18 @@ function MainPage() {
       //  });
     }
 
-  const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
+  const [date, setDate] = useState(new Date());
+  const [dateString, setDateString] = useState(date.toISOString().split("T")[0]);
+
+  //const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
+
 
   const handleChange = (newValue) => {
-    setValue(newValue);
+    setDate(newValue);
+    setDateString(newValue.toISOString().split("T")[0]);
   };
 
-  const [date, setDate] = React.useState(new Date());
+  
 
   return (
     <>
@@ -252,7 +257,7 @@ function MainPage() {
                     <Stack spacing={3}>
                       <DesktopDatePicker
                         label="Fly date"
-                        inputFormat="DD/MM/YYYY"
+                        inputFormat="YYYY-MM-DD"
                         value={date}
                         onChange={handleChange}
                         renderInput={(params) => <TextField {...params} />}
@@ -290,7 +295,7 @@ function MainPage() {
                                         <TableCell align="left" >{flightItem.origin}    </TableCell>
                                         <TableCell align="left">{flightItem.destiny}   </TableCell>
                                         <TableCell align="left">{flightItem.airline}   </TableCell>
-                                        <TableCell align="left">{flightItem.date}      </TableCell>
+                                        <TableCell align="left">{flightItem.strDate}      </TableCell>
                                         <TableCell align="left">{flightItem.departure} </TableCell>
                                         <TableCell align="left">{flightItem.arrival}   </TableCell>
                                         <TableCell align="left">{flightItem.scales}    </TableCell>

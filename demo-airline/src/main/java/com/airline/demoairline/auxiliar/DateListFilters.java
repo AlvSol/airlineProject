@@ -9,14 +9,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@EnableMongoRepositories
 public class DateListFilters {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Date currentDate;
 
-    @Autowired
-    FlightRepository flightRepository;
+
+    private FlightRepository flightRepository;
+
+    public DateListFilters(FlightRepository flightRepository) {
+        this.flightRepository = flightRepository;
+        this.currentDate = new Date();
+    }
 
     public DateListFilters() {
         this.currentDate = new Date();
