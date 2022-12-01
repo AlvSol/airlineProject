@@ -12,6 +12,10 @@ public class PassengerList {
     private String name;
     private List<User> listPassenger;
 
+    public PassengerList() {
+
+    }
+
     public PassengerList(int id, String name, List<User> listPassenger) {
         this.id = id;
         this.name = name;

@@ -12,19 +12,13 @@ public class User {
     private String nationality;
     private int age;
 
-    public enum AgeGroup {
-        LT_TWO,
-        TWO_NINE,
-        GT_NINE
-    }
-
-    private AgeGroup ageGroup;
+    private int ageGroup;
 
     public User() {
 
     }
 
-    public User(String id, String name, String surname, String nationality, AgeGroup ageGroup) {
+    public User(String id, String name, String surname, String nationality, int ageGroup) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -33,7 +27,7 @@ public class User {
         this.ageGroup = ageGroup;
     }
 
-    public User(String name, String surname, String nationality, AgeGroup ageGroup) {
+    public User(String name, String surname, String nationality, int ageGroup) {
         this.name = name;
         this.surname = surname;
         this.nationality = nationality;
@@ -81,11 +75,33 @@ public class User {
         this.age = age;
     }
 
-    public AgeGroup getAgeGroup() {
+    public int getAgeGroup() {
         return ageGroup;
     }
 
-    public void setAgeGroup(AgeGroup ageGroup) {
+    public void setAgeGroup(int ageGroup) {
         this.ageGroup = ageGroup;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(!obj.getClass().equals(User.class)) {
+            return false;
+        }
+
+        if(!((User) obj).id.equals(this.id)) {
+            return false;
+        }
+
+        if(!((User) obj).name.equals(this.name)) {
+            return false;
+        }
+
+        if(!((User) obj).surname.equals(this.surname)) {
+            return false;
+        }
+
+        return ((User) obj).nationality.equals(this.nationality);
     }
 }

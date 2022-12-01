@@ -54,15 +54,15 @@ public class UserDemoApplication implements CommandLineRunner {
 	public void createUsers() {
 		System.out.println("Data creation started...");
 
-		userRepository.save(new User("Paco", "Torres", "Spanish", User.AgeGroup.GT_NINE));
-		userRepository.save(new User("123456","Pepe", "Villuela", "Spanish", User.AgeGroup.GT_NINE));
-		userRepository.save(new User("Mike", "Smith", "English", User.AgeGroup.GT_NINE));
-		userRepository.save(new User("012345", "Tom", "Thomson", "English", User.AgeGroup.GT_NINE));
-		userRepository.save(new User("Gerard", "TypicalFrenchSurname", "French", User.AgeGroup.GT_NINE));
+		userRepository.save(new User("Paco", "Torres", "Spanish", 3));
+		userRepository.save(new User("123456","Pepe", "Villuela", "Spanish", 3));
+		userRepository.save(new User("Mike", "Smith", "English", 3));
+		userRepository.save(new User("012345", "Tom", "Thomson", "English", 3));
+		userRepository.save(new User("Gerard", "TypicalFrenchSurname", "French", 3));
 
 
-		userRepository.save(new User("Bebesita", "Bebelin", "Spanish", User.AgeGroup.LT_TWO));
-		userRepository.save(new User("Daniel", "ElTravieso", "Spanish", User.AgeGroup.values()[1]));
+		userRepository.save(new User("Bebesita", "Bebelin", "Spanish", 1));
+		userRepository.save(new User("45678","Daniel", "ElTravieso", "Spanish", 2));
 
 		System.out.println("Data creation finished...");
 	}
@@ -85,10 +85,12 @@ public class UserDemoApplication implements CommandLineRunner {
 
 		User user1 = userRepository.findById("123456").get();
 		User user2 = userRepository.findById("012345").get();
+		User user3 = userRepository.findById("45678").get();
 		List<User> listUsers = new ArrayList<>();
 
 		listUsers.add(user1);
 		listUsers.add(user2);
+		listUsers.add(user3);
 
 		passengerListRepository.save(new PassengerList(0, "FORBIDDEN", listUsers));
 

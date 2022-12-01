@@ -69,14 +69,20 @@ public class UserController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    public ResponseEntity<Boolean> checkUser(@RequestBody User user) {
+    @PostMapping(value = "/check")
+    public Boolean checkUser(@RequestBody User user) {
         boolean valid = true;
         PassengerList passengerList = passengerListRepository.findById(0).get();
         List<User> list = passengerList.getListPassenger();
 
-        if(list.contains(user))
-            valid = false;
+        for(User u: list) {
+            if(u.equals(user)) {
+                valid = false;
+                break;
+            }
+        }
 
-        return new ResponseEntity<Boolean>(valid, HttpStatus.OK);
+
+        return valid;
     }
 }
