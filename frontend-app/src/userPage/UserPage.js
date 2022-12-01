@@ -1,6 +1,7 @@
 import './UserPage.css'
 
 import React , {useState, useEffect} from 'react';
+import { useLocation } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -83,16 +84,18 @@ function UserPage(props) {
     };
 
     const [lugageWarning, setlugageWarning] = React.useState(false);
+
+    const location = useLocation();
     
     function getFinalPrice(flyprice){
         let finalprice;
         finalprice = (lugageWarning? flyprice*1.2 : flyprice);
         for(let i=0; i < extraPassengers.length;++i){
 
-            if(extraPassengers[i].age==1){
+            if(extraPassengers[i].age==2){
                 finalprice += flyprice*.5;
             }
-            else if(extraPassengers[i].age==2){
+            else if(extraPassengers[i].age==3){
                 finalprice += flyprice;
             }
         }
@@ -323,7 +326,7 @@ function UserPage(props) {
                     <Button variant="contained" onClick = {RemovePassenger}>Remove Passenger</Button>                
                 </div>
                 <div className='priceText'>
-                    <h2>Total price: </h2><h2>{getFinalPrice(20)}</h2>
+                    <h2>Total price: </h2><h2>{getFinalPrice(location.state.price)}</h2>
                     <Button variant="contained" onClick={handleClickOpen}> Buy tickets</Button>   
                 </div>
             </div>
