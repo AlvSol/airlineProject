@@ -12,23 +12,33 @@ public class User {
     private String nationality;
     private int age;
 
+    public enum AgeGroup {
+        LT_TWO,
+        TWO_NINE,
+        GT_NINE
+    }
+
+    private AgeGroup ageGroup;
+
     public User() {
 
     }
 
-    public User(String id, String name, String surname, String nationality, int age) {
+    public User(String id, String name, String surname, String nationality, AgeGroup ageGroup) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.nationality = nationality;
-        this.age = age;
+        this.age = 30;
+        this.ageGroup = ageGroup;
     }
 
-    public User(String name, String surname, String nationality, int age) {
+    public User(String name, String surname, String nationality, AgeGroup ageGroup) {
         this.name = name;
         this.surname = surname;
         this.nationality = nationality;
-        this.age = age;
+        this.age = 30;
+        this.ageGroup = ageGroup;
     }
 
     public String getId() {
@@ -69,5 +79,13 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public AgeGroup getAgeGroup() {
+        return ageGroup;
+    }
+
+    public void setAgeGroup(AgeGroup ageGroup) {
+        this.ageGroup = ageGroup;
     }
 }

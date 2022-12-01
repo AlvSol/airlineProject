@@ -1,8 +1,10 @@
 package com.airline.userdemo.controller;
 
 import com.airline.userdemo.model.Nationality;
+import com.airline.userdemo.model.PassengerList;
 import com.airline.userdemo.model.User;
 import com.airline.userdemo.repository.NationalityRepository;
+import com.airline.userdemo.repository.PassengerListRepository;
 import com.airline.userdemo.service.UserServiceAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ public class UserController {
     @Autowired
     private NationalityRepository nationalityRepository;
 
+    @Autowired
+    PassengerListRepository passengerListRepository;
 
     @GetMapping(value="/all")
     public List<User> getAll() {
@@ -63,5 +67,16 @@ public class UserController {
         }
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> checkUser(@RequestBody User user) {
+        boolean valid = true;
+        PassengerList passengerList = passengerListRepository.findById(0).get();
+        List<User> list = passengerList.getListPassenger();
+
+        if(list.contains(user))
+            valid = false;
+
+        return new ResponseEntity<Boolean>(valid, HttpStatus.OK);
     }
 }
