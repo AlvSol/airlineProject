@@ -1,7 +1,7 @@
 import './MainPage.css'
 import UserPage from '../userPage/UserPage';
 
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -37,7 +37,7 @@ import { visuallyHidden } from '@mui/utils';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Link } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -80,11 +80,14 @@ function MainPage() {
         },
     ]
 
+    const navigate = useNavigate();
+
     const [order, setOrder]         = useState('asc');
     const [orderBy, setOrderBy]     = useState('calories');
     const [selected, setSelected]   = useState([]);
     const [placeList, setPlaceList] = useState([]);
     const [flightsList, setFlightsList] = useState([]);
+    const [priceFlight, setPriceFlight] = useState(20);
 
     useEffect(() => {
       // Simple GET request using axios
@@ -140,9 +143,7 @@ function MainPage() {
         setDestiny(event.target.value);
     };
 
-    const openPage=()=>{
-      window.location="/passengers"
-    }
+    const openPage = useCallback(() => navigate('/passengers', {replace: true, price: priceFlight}), [navigate])
   
     const handleButton=()=>{
       setFlightsList([]);
@@ -274,8 +275,10 @@ function MainPage() {
                                   .map((flightItem, index) => {
                                     const isItemSelected = isSelected(flightItem.origin);
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    setPriceFlight(flightItem.price);
                                     return (
-                                      <tr className='flyRow' onClick={openPage}>
+                                      // <Link to="/passengers">
+                                      <tr className='flyRow' onClick={openPage()}>
                                         <TableCell align="left" >{flightItem.origin}    </TableCell>
                                         <TableCell align="left">{flightItem.destiny}   </TableCell>
                                         <TableCell align="left">{flightItem.airline}   </TableCell>
@@ -284,6 +287,7 @@ function MainPage() {
                                         <TableCell align="left">{flightItem.arrival}   </TableCell>
                                         <TableCell align="left">{flightItem.scales}    </TableCell>
                                       </tr>
+                                      // </Link>
                                     );
                                   })}    
                               </TableBody>
