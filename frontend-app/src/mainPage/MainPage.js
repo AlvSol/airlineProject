@@ -151,23 +151,7 @@ function MainPage() {
         console.log(response.data);
         setFlightsList([...response.data]);
       })
-      // console.log("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny);
-      //   e.preventDefault();
-      //   fetch("http://localhost:8080/flights/api/travel/" + origin + "/" + destiny, {
-      //       method:"GET",
-      //       headers: {
-      //         'Accept': 'application/json, text/plain, */*',
-      //         'Content-Type': 'application/json',
-      //         },
-      //         'credentials': 'same-origin'
-      //   })
-      //   .then(res => res.json())
-      //   .then((data) => {
-      //     console.log(data);
-      //  })
-      //  .catch((err) => {
-      //     console.log(err.message);
-      //  });
+      
     }
 
   const [date, setDate] = useState(new Date());

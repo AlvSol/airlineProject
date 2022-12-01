@@ -1,6 +1,6 @@
 import './UserPage.css'
 
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -47,6 +47,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
 
 //____________________________________________________________________________________//
 
@@ -58,6 +59,17 @@ function UserPage(props) {
         'French',
         'Italian'
     ]
+
+    const [nationalityList, setNationalityList] = useState([]);
+
+    useEffect(() => {
+        // Simple GET request using axios
+        axios.get("http://localhost:8081/user/api/allnations")
+        .then(response=>{
+          console.log(response)
+          setNationalityList(response.data);
+        })
+      },[]);
   
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
@@ -117,7 +129,30 @@ function UserPage(props) {
 
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
-        setOpen(true);
+
+        if(nameText && surnameText && idText && age && nationality) {
+            
+            const usercheck = {
+                id: idText,
+                name: nameText,
+                surname: surnameText,
+                nationality: nationality,
+                age: 30,
+                ageGroup: age,
+            }
+    
+            console.log(usercheck);
+             axios.post("http://localhost:8081/user/api/check", usercheck)
+                  .then(response => {
+                    if(!response.data) {
+                        setBuyMessage("The passenger " + nameText + " " + surnameText + " with ID "
+                        + idText + " is prohibited from travel");
+                    }
+                
+                    setOpen(true)});
+             //setOpen(true);
+        }
+
     };
     const handleClose = () => {
         setOpen(false);
@@ -142,10 +177,11 @@ function UserPage(props) {
     }, [idText]);
 
     React.useEffect(()=>{
-        if(nameText && surnameText && idText && age && nationality)
-           setBuyMessage("You have successfully bought your tickets!");
-        else
+        if(nameText && surnameText && idText && age && nationality) {
+            setBuyMessage("You have successfully bought your tickets!");
+        } else {
             setBuyMessage("Complete all captions to buy the tickets");
+        }
     }, [nameText,surnameText, idText, age, nationality])
 
     // Set empty erroMessage only if text is less than MAX_LENGTH
@@ -210,8 +246,8 @@ function UserPage(props) {
                                             label="nationality"
                                             onChange={nationalityChange}
                                         >
-                                            {nationalities.map((nationality)=>(
-                                                <MenuItem value={1}> {nationality} </MenuItem>
+                                            {nationalityList.map((nationItem)=>(
+                                                <MenuItem value={nationItem}> {nationItem} </MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
